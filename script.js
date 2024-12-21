@@ -76,7 +76,7 @@ const DOM = (Cartindex) => `
         <h3>${Cartindex.name}</h3>
       </div>
       <div class="Cartprize quality">
-        <span class="samePrice"> ${Cartindex?.price}</span>
+        <span class="samePrice"> ${Cartindex?.orginalPrice}</span>
         <div class="incDecBtn">
           <button data-id="${Cartindex?.id}" id="inc">+</button>
           <input data-id="${Cartindex?.id}" type="text" readonly value=${Cartindex.Itemsno} />
