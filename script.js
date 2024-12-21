@@ -14,7 +14,6 @@ let currentPrice = document.querySelector("#currentPrice");
 let finalPrice = document.querySelector("#finalPrice");
 let animDiv = document.querySelector("#serviceValue");
 let productItemsPar = document.querySelector("#all-items");
-let ProductsBtn = document.querySelector("#ProductsBtn");
 let about = "block";
 nav[0].classList.add("changePy");
 let addItmes = document.querySelector("#addItmes");
@@ -183,7 +182,7 @@ productItemsPar.addEventListener("click", (e) => {
 
     target.innerText == "ABOUT" ? (about = "none") : (about = "block");
 
-    if (target.innerText == "PRODUCTS" || ProductsBtn.id == "ProductsBtn")
+    if (target.innerText == "PRODUCTS")
       productName.forEach((e) => (e.style.display = "none"));
     else {
       productName[0].style.display = "grid";
