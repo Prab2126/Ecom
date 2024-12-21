@@ -65,36 +65,31 @@ renderItems(data);
 
 const array = data.map((e) => e.value);
 const addToCart = [];
-
-const cartItemsRender = () => {
-  if (addToCart.length == 0) {
-    addItmes.previousElementSibling.innerHTML = "No item found";
-  } else {
-    let Cartindex = addToCart[addToCart.length - 1];
-    addItmes.previousElementSibling.innerHTML = "";
-
-    addItmes.innerHTML += `
-      <div class="cartItems">
-      <div class="info">
-            <span class="tag">${Cartindex?.category}</span>
-            <img
-              src=${Cartindex?.img}
-              alt="not found"
-            />
-            <h3>${Cartindex.name}</h3>
-          </div>
-          <div class="Cartprize quality">
-            <span class="samePrice"> ${Cartindex?.price}</span>
-            <div class="incDecBtn">
-              <button data-id="${Cartindex?.id}" id="inc">+</button>
-              <input data-id="${Cartindex?.id}" type="text" readonly value=${Cartindex.Itemsno} />
-              <button data-id="${Cartindex?.id}" id="dec">-</button>
-            </div>
-            <button class="Addcarts">Remove</button>
-          </div></div>`;
-  }
+const DOM = (Cartindex) => `
+  <div class="cartItems">
+  <div class="info">
+        <span class="tag">${Cartindex?.category}</span>
+        <img
+          src=${Cartindex?.img}
+          alt="not found"
+        />
+        <h3>${Cartindex.name}</h3>
+      </div>
+      <div class="Cartprize quality">
+        <span class="samePrice"> ${Cartindex?.price}</span>
+        <div class="incDecBtn">
+          <button data-id="${Cartindex?.id}" id="inc">+</button>
+          <input data-id="${Cartindex?.id}" type="text" readonly value=${Cartindex.Itemsno} />
+          <button data-id="${Cartindex?.id}" id="dec">-</button>
+        </div>
+        <button class="Addcarts">Remove</button>
+      </div></div>`;
+const cartAddView = (check, DOMelement, Cartindex) => {
+  if (check) {
+    addItmes.innerHTML = "";
+    addToCart.forEach((e) => (addItmes.innerHTML += DOMelement(e)));
+  } else addItmes.innerHTML += DOMelement(Cartindex);
 };
-cartItemsRender();
 
 let calculateArr = [0, 50];
 
@@ -102,8 +97,9 @@ function finalPriceDom() {
   let calculateArrValue = addToCart.reduce((a, n) => a + n.price, 0);
   calculateArr[0] = calculateArrValue;
   currentPrice.innerHTML = calculateArrValue;
-  tax.innerHTML = calculateArr[1];
-  finalPrice.innerHTML = calculateArr.reduce((a, n) => a + n);
+  tax.innerHTML = calculateArr[0] == 0 ? 0 : calculateArr[1];
+  finalPrice.innerHTML =
+    calculateArr[0] == 0 ? 0 : calculateArr.reduce((a, n) => a + n);
 }
 
 const numUpdate = (e, id, index, indexofCart, bool, orginalPrice) => {
@@ -130,6 +126,20 @@ const numUpdate = (e, id, index, indexofCart, bool, orginalPrice) => {
     }
   }
 };
+
+const cartItemsRender = (check) => {
+  finalPriceDom();
+
+  if (addToCart.length == 0) {
+    addItmes.innerHTML = "";
+    addItmes.previousElementSibling.innerHTML = "No item found";
+  } else {
+    let Cartindex = addToCart[addToCart.length - 1];
+    addItmes.previousElementSibling.innerHTML = "";
+    check ? cartAddView(true, DOM) : cartAddView(false, DOM, Cartindex);
+  }
+};
+cartItemsRender();
 productItemsPar.addEventListener("click", (e) => {
   let id = e.target.id;
   let Dataid = e.target.dataset.id;
@@ -201,12 +211,9 @@ priceArea.addEventListener("click", (e) => {
   let indexofCart = addToCart.findIndex((e) => e.id == index);
   let orginalPrice = addToCart[indexofCart]?.orginalPrice;
   numUpdate(e, id, index - 1, indexofCart, true, orginalPrice);
-  console.log(addToCart);
-  console.log(indexofCart);
   if (e.target.classList == "Addcarts") {
-    addToCart.splice(indexofCart, 1);
-    console.log(addToCart);
-    cartItemsRender();
+    addToCart.splice(indexofCart - 1, 1);
+    cartItemsRender(true);
   }
 });
 
