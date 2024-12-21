@@ -85,6 +85,7 @@ const DOM = (Cartindex) => `
         <button class="Addcarts">Remove</button>
       </div></div>`;
 const cartAddView = (check, DOMelement, Cartindex) => {
+  cart.children[1].innerHTML = addToCart.length;
   if (check) {
     addItmes.innerHTML = "";
     addToCart.forEach((e) => (addItmes.innerHTML += DOMelement(e)));
